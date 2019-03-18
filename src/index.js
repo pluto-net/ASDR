@@ -4,10 +4,10 @@ import compression from "compression";
 import bodyParser from "body-parser";
 import path from "path";
 import mongoose from "mongoose";
-import cron from "node-cron";
+// import cron from "node-cron";
 import Tweet from "./model/tweet";
 import TargetWord from "./model/targetWord";
-import { searchCronJob } from "./cron";
+// import { searchCronJob } from "./cron";
 import { getTargetWords } from "./targetWord";
 
 const app = express();
@@ -15,7 +15,7 @@ const port = 3000;
 
 mongoose.connect("mongodb://localhost:27017/pluto-ADSR", {
   user: "TOPGUN",
-  pass: "plplplpl",
+  pass: "pluto8219*",
   useNewUrlParser: true
 });
 
@@ -28,7 +28,7 @@ db.once("open", function() {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(express.static(path.resolve(__dirname, "../", "public")));
-  app.use(favicon(path.join(__dirname, "../", "public", "favicon.ico")));
+  app.use(favicon(path.resolve(__dirname, "../", "public", "favicon.ico")));
   app.use(compression());
 
   app.get("/", async (_req, res) => {
@@ -50,9 +50,29 @@ db.once("open", function() {
     res.redirect("back");
   });
 
+  app.put("/words/:id", (req, res) => {
+    if (req.params.id) {
+      TargetWord.findById(req.params.id, (err, word) => {
+        if (!err) {
+          TargetWord.updateOne(
+            { _id: req.params.id },
+            { monitoring: !word.monitoring },
+            (err, _result) => {
+              if (!err) {
+                res.json({ success: true });
+              } else {
+                res.json({ fail: true, error: err.messgae });
+              }
+            }
+          );
+        }
+      });
+    }
+  });
+
   app.listen(port, () => console.log(`Web-server started at ${port}!`));
 
-  cron.schedule("* * * * *", () => {
-    searchCronJob();
-  });
+  // cron.schedule("* * * * *", () => {
+  //   searchCronJob();
+  // });
 });

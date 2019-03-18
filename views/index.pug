@@ -15,7 +15,13 @@ html
         each word in targetWords
           li.list-group-item.d-flex.justify-content-between.align-items-center
             = word.word
-            span.badge.badge-primary.badge-pill= word.monitoring
+            
+            - var handler = `handleClickBadge("${word._id}")`
+              if word.monitoring
+                a.badge.badge-primary.badge-pill(onclick=handler, href="#") ON
+              else
+                a.badge.badge-danger.badge-pill(onClick=handler, href="#") OFF
+                  
       div.mt-4
         form(action="/words/new", method="POST")
           div.form-row.align-items-center
@@ -24,7 +30,6 @@ html
               input#inlineFormInput.form-control.mb-2(type='text' name="word" placeholder='new word to WATCH')
             div.col-auto
               button.btn.btn-primary.mb-2(type='submit') Submit
-
 
       hr.my-4
 
@@ -40,3 +45,4 @@ html
                   div= tweet.content
 
         div.col to be updated
+    script(src='/javascripts/index.js')
