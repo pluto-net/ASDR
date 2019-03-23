@@ -15,3 +15,15 @@ function handleClickBadge(wordId) {
   xhr.open("PUT", "/words/" + wordId);
   xhr.send();
 }
+
+function handleClickDeleteWord(wordId) {
+  $.ajax({
+    url: `words/${wordId}`,
+    method: "DELETE"
+  }).done(res => {
+    if (res.success) {
+      location.reload();
+    }
+  });
+  console.log(wordId);
+}

@@ -70,6 +70,18 @@ db.once("open", function() {
     }
   });
 
+  app.delete("/words/:id", (req, res) => {
+    if (req.params.id) {
+      TargetWord.deleteOne({ _id: req.params.id }, err => {
+        if (err) {
+          res.json({ fail: true, error: err.message });
+        } else {
+          res.json({ success: true });
+        }
+      });
+    }
+  });
+
   app.listen(port, () => console.log(`Web-server started at ${port}!`));
 
   // cron.schedule("* * * * *", () => {
