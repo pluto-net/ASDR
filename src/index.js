@@ -4,10 +4,10 @@ import compression from "compression";
 import bodyParser from "body-parser";
 import path from "path";
 import mongoose from "mongoose";
-// import cron from "node-cron";
+import cron from "node-cron";
 import Tweet from "./model/tweet";
 import TargetWord from "./model/targetWord";
-// import { searchCronJob } from "./cron";
+import { searchCronJob } from "./cron";
 import { getTargetWords } from "./targetWord";
 
 const app = express();
@@ -15,7 +15,7 @@ const port = 3000;
 
 mongoose.connect("mongodb://localhost:27017/pluto-ADSR", {
   user: "TOPGUN",
-  pass: "pluto8219*",
+  pass: "?????????",
   useNewUrlParser: true
 });
 
@@ -61,7 +61,7 @@ db.once("open", function() {
               if (!err) {
                 res.json({ success: true });
               } else {
-                res.json({ fail: true, error: err.messgae });
+                res.json({ fail: true, error: err.message });
               }
             }
           );
@@ -84,7 +84,7 @@ db.once("open", function() {
 
   app.listen(port, () => console.log(`Web-server started at ${port}!`));
 
-  // cron.schedule("* * * * *", () => {
-  //   searchCronJob();
-  // });
+  cron.schedule("* * * * *", () => {
+    searchCronJob();
+  });
 });
